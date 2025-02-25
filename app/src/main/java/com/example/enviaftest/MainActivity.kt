@@ -29,15 +29,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            AppContent()
-        }
-    }
-}
 
 @Composable
 fun AppContent() {
@@ -60,7 +56,7 @@ fun SplashScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFF3D70)), // Fondo con color solicitado
+            .background(Color(0xFFFF3D70)),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -70,7 +66,12 @@ fun SplashScreen() {
                 modifier = Modifier.size(300.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(text = "Test de Envia Flores", fontSize = 24.sp, color = Color.White)
+            Text(
+                text = "Test de Envia Flores",
+                fontSize = 24.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
@@ -79,9 +80,43 @@ fun SplashScreen() {
 fun PostListScreen(viewModel: PostViewModel = viewModel()) {
     val posts by viewModel.posts.collectAsState(initial = emptyList())
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFFE6EC)) // Fondo rosa más claro
+    ) {
         items(posts) { post ->
-            Text(text = post.title, fontSize = 20.sp, modifier = Modifier.padding(16.dp))
+            PostItem(post)
+        }
+    }
+}
+
+@Composable
+fun PostItem(post: Post) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = post.title,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFFF3D70),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = post.body,
+                fontSize = 14.sp,
+                color = Color.DarkGray,
+                textAlign = TextAlign.Justify
+            )
         }
     }
 }
